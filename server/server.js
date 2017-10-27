@@ -2,7 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var express = require('express');
 
-
+var indexRoutes = require('./routes/index');
 //create app
 var app = express();
 
@@ -13,12 +13,10 @@ app.engine('html', (path, options, callbacks) => {
 });
 
 //middleware
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, '../client')));
 
 //routes
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+app.use('/', indexRoutes);
 
 //error handler
 app.use((err, req, res, next) => {
@@ -26,7 +24,4 @@ app.use((err, req, res, next) => {
 });
 
 //server app
-var port = 8000;
-app.listen(port, () => {
-  console.log('running at localhost:' + port);
-});
+module.exports = app;
